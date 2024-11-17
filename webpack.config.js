@@ -1,10 +1,11 @@
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const path = require("path");
-const TerserWebpackPlugin = require("terser-webpack-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const ESLintPlugin = require("eslint-webpack-plugin");
-const StylelintPlugin = require("stylelint-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const StylelintPlugin = require('stylelint-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     mode: 'development',
@@ -20,7 +21,7 @@ module.exports = {
     devtool: 'inline-source-map',
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'main.css'
+            filename: 'main.css',
         }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'src', 'index.pug'),
@@ -31,7 +32,8 @@ module.exports = {
         new TerserWebpackPlugin(),
         new CssMinimizerPlugin(),
         new ESLintPlugin(),
-        new StylelintPlugin()
+        new StylelintPlugin(),
+        new Dotenv(),
     ],
     optimization: {
         minimizer: [new TerserWebpackPlugin(), new CssMinimizerPlugin()],
@@ -42,25 +44,26 @@ module.exports = {
                 test: /\.css$/,
                 use: [
                     {
-                    loader: MiniCssExtractPlugin.loader,
-                    options: {
-                        esModule: true,
-                    }
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            esModule: true,
+                        },
                     },
-                    'css-loader']
+                    'css-loader',
+                ],
             },
             {
                 test: /\.pug$/,
                 loader: '@webdiscus/pug-loader',
                 options: {
-                    pretty: true
-				}
+                    pretty: true,
+                },
             },
             {
                 test: /\.ts$/,
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
-        ]
-    }
+        ],
+    },
 };
